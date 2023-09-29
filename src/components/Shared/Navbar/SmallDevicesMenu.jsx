@@ -4,7 +4,7 @@ import { FaXmark } from "react-icons/fa6";
 
 const SmallDevicesMenu = ({ toggleMenu }) => {
   return (
-    <div className="h-screen bg-white w-full absolute left-0 top-0 flex flex-col justify-center items-center">
+    <div className="h-screen bg-white w-full absolute left-0 top-0 flex flex-col justify-center items-center z-20">
       <div className="flex items-center justify-center flex-col gap-y-4">
         <Link to="/">
           <Button label={"Home"} />
