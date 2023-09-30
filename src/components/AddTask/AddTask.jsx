@@ -1,5 +1,13 @@
 import { Dialog } from "@headlessui/react";
 const AddTask = ({ isOpen, setIsOpen }) => {
+  const handleNewTask = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const title = form.title.value;
+    const description = form.description.value;
+    console.log(title, description);
+    setIsOpen(false);
+  };
   return (
     <>
       <Dialog
@@ -14,12 +22,13 @@ const AddTask = ({ isOpen, setIsOpen }) => {
           <Dialog.Description className="font-medium text-gray-400 text-center border-b-2 border-gray-200 pb-7 pt-3 mb-8">
             Keep track of your new task.
           </Dialog.Description>
-          <form>
+          <form onSubmit={handleNewTask}>
             <div className="flex flex-col gap-y-3">
               <label htmlFor="title" className="text-lg font-medium">
                 Title
               </label>
               <input
+                required
                 type="text"
                 name="title"
                 id="title"
@@ -33,6 +42,7 @@ const AddTask = ({ isOpen, setIsOpen }) => {
                 Description
               </label>
               <textarea
+                required
                 name="description"
                 id="description"
                 placeholder="Description"
