@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import { LiaSpinnerSolid } from "react-icons/lia";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
+  const navigate = useNavigate();
 
-  const { signIn, signInWithGoogle } = useContext(AuthContext);
+  const { signIn, signInWithGoogle, loading } = useContext(AuthContext);
 
   const togglePassword = () => {
     setShowPass(!showPass);
@@ -18,6 +21,8 @@ const Login = () => {
       .then((res) => {
         const user = res.user;
         console.log(user);
+        navigate("/");
+        toast.success("Login Successful");
       })
       .catch((err) => {
         const message = err.message;
@@ -37,6 +42,8 @@ const Login = () => {
       .then((res) => {
         const user = res.user;
         console.log(user);
+        toast.success("Login Successful");
+        navigate("/");
       })
       .catch((err) => {
         const message = err.message;
@@ -46,10 +53,10 @@ const Login = () => {
   return (
     <div className="md:bg-gradient-to-tl from-[#fc354c] to-[#0abfbc] h-screen min-h-[768px] grid place-items-center">
       <div className="bg-white rounded-3xl md:px-32 md:py-10">
-        <h1 className="text-3xl font-medium text-center">Log In</h1>
+        <h1 className="text-3xl font-medium text-center mb-1">Log In</h1>
         <p className="text-center mb-10 text-[#333]">
           Don&apos;t have an account?{" "}
-          <Link to="/login" className="underline text-black">
+          <Link to="/signup" className="underline text-black">
             Sign up
           </Link>
         </p>
@@ -95,6 +102,7 @@ const Login = () => {
             </label>
             <br />
             <input
+              required
               type="email"
               name="email"
               id="email"
@@ -125,6 +133,7 @@ const Login = () => {
               )}
             </div>
             <input
+              required
               type={showPass ? "text" : "password"}
               name="password"
               id="password"
@@ -134,11 +143,22 @@ const Login = () => {
           <p className="underline text-right mt-2 mb-6 cursor-pointer">
             Forget your password?
           </p>
-          <input
+          <button
+            disabled={loading}
             type="submit"
-            value="Log in"
-            className="text-xl font-medium rounded-[40px] border w-full py-4 border-none bg-black text-white cursor-pointer"
-          />
+            className={`text-xl font-medium rounded-[40px] border w-full py-4 border-none ${
+              loading ? "bg-gray-100" : "bg-black"
+            } text-white cursor-pointer text-center`}
+          >
+            {loading ? (
+              <LiaSpinnerSolid
+                size={28}
+                className="mx-auto animate-spin text-red-400"
+              ></LiaSpinnerSolid>
+            ) : (
+              "Login"
+            )}
+          </button>
         </form>
       </div>
     </div>
