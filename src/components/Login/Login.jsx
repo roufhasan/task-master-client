@@ -1,14 +1,48 @@
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
 
+  const { signIn, signInWithGoogle } = useContext(AuthContext);
+
   const togglePassword = () => {
     setShowPass(!showPass);
   };
-  console.log(showPass);
+
+  // Login using Google
+  const handleGoogleLogin = () => {
+    signInWithGoogle()
+      .then((res) => {
+        const user = res.user;
+        console.log(user);
+      })
+      .catch((err) => {
+        const message = err.message;
+        console.log(message);
+      });
+  };
+
+  // Login using email and password
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    // sign in with email and password
+    signIn(email, password)
+      .then((res) => {
+        const user = res.user;
+        console.log(user);
+      })
+      .catch((err) => {
+        const message = err.message;
+        console.log(message);
+      });
+  };
   return (
     <div className="md:bg-gradient-to-tl from-[#fc354c] to-[#0abfbc] h-screen min-h-[768px] grid place-items-center">
       <div className="bg-white rounded-3xl md:px-32 md:py-10">
@@ -19,7 +53,10 @@ const Login = () => {
             Sign up
           </Link>
         </p>
-        <div className="flex gap-x-4 items-center justify-center py-2 px-8 md:py-5 md:px-36 rounded-[40px] border border-[#333]">
+        <div
+          onClick={handleGoogleLogin}
+          className="flex gap-x-4 items-center justify-center py-2 px-8 md:py-5 md:px-36 rounded-[40px] border border-[#333] cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -51,7 +88,7 @@ const Login = () => {
           OR
           <div className="h-[2px] w-full bg-[#666] opacity-25"></div>
         </div>
-        <form>
+        <form onSubmit={handleLogin}>
           <div>
             <label htmlFor="email" className="text-lg">
               Your email

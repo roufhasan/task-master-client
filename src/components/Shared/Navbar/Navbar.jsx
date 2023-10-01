@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Container from "../Container";
 import Logo from "./Logo";
 import Menu from "./Menu";
 import { FaBars } from "react-icons/fa6";
@@ -14,24 +13,22 @@ const Navbar = () => {
   };
   return (
     <>
-      <Container>
-        <nav className="flex items-center justify-between py-2">
-          <Logo />
-          {/* Menu For Medium Devices */}
-          <div className="hidden md:flex">
-            <Menu />
+      <nav className="flex items-center justify-between py-2">
+        <Logo />
+        {/* Menu For Medium Devices */}
+        <div className="hidden md:flex">
+          <Menu />
+        </div>
+        {/* Menu For Small Devices */}
+        <div onClick={toggleMenu} className="md:hidden">
+          <FaBars className="text-2xl" />
+        </div>
+        {isOpen && (
+          <div>
+            <SmallDevicesMenu toggleMenu={toggleMenu} />
           </div>
-          {/* Menu For Small Devices */}
-          <div onClick={toggleMenu} className="md:hidden">
-            <FaBars className="text-2xl" />
-          </div>
-          {isOpen && (
-            <div>
-              <SmallDevicesMenu toggleMenu={toggleMenu} />
-            </div>
-          )}
-        </nav>
-      </Container>
+        )}
+      </nav>
     </>
   );
 };
