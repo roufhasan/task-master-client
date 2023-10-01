@@ -1,19 +1,43 @@
 import { Dialog } from "@headlessui/react";
-const AddTask = ({ isOpen, setIsOpen }) => {
+import axios from "axios";
+import toast from "react-hot-toast";
+
+const AddTask = ({ isOpen, setIsOpen, user, setNewTask }) => {
+  const date = new Date().toLocaleString();
+
   const handleNewTask = (e) => {
     e.preventDefault();
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
-    console.log(title, description);
-    setIsOpen(false);
+
+    const taskDetails = {
+      email: user?.email,
+      title,
+      description,
+      date,
+    };
+
+    axios
+      .post("http://localhost:5000/add-task", taskDetails)
+      .then((res) => {
+        console.log(res);
+        if (res.data.insertedId) {
+          toast.success("Task Added");
+        }
+        setNewTask(true);
+        setIsOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full min-h-full md:w-1/2 md:min-h-[570px] md:border-2 border-[#DEE2E6] px-10 py-9 shadow-2xl"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full min-h-full md:w-1/2 md:min-h-[570px] md:border-2 border-[#DEE2E6] px-10 py-9 shadow-2xl py-[calc(100vh + 20px)]"
       >
         <Dialog.Panel>
           <Dialog.Title className="text-2xl font-semibold text-center">

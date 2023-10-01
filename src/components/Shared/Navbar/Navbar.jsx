@@ -5,10 +5,12 @@ import { FaBars } from "react-icons/fa6";
 import SmallDevicesMenu from "./SmallDevicesMenu";
 import { AuthContext } from "../../../providers/AuthProvider";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,6 +20,7 @@ const Navbar = () => {
   const handleLogOut = () => {
     logOut().then(() => {
       toast.success("We will miss you :(");
+      navigate("/");
     });
   };
   return (
@@ -34,7 +37,11 @@ const Navbar = () => {
         </div>
         {isOpen && (
           <div>
-            <SmallDevicesMenu toggleMenu={toggleMenu} />
+            <SmallDevicesMenu
+              toggleMenu={toggleMenu}
+              user={user}
+              handleLogOut={handleLogOut}
+            />
           </div>
         )}
       </nav>
